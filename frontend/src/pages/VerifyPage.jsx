@@ -1,5 +1,5 @@
 import { Alert, Box, Button, CircularProgress, Typography } from '@mui/material';
-import axios from 'axios';
+import axios from '../api/axiosInstance';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -8,56 +8,38 @@ function VerifyPage() {
   const [message, setMessage] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
-  const BASE_URI = import.meta.env.VITE_BASE_URI || 'http://localhost:8000';
 
   useEffect(() => {
-    console.log('VerifyPage: Starting verification process');
-    console.log('BASE_URI:', BASE_URI);
-    console.log('Location:', location);
-
     const verifyEmail = async () => {
       const params = new URLSearchParams(location.search);
       const token = params.get('token');
-      console.log('Token from URL:', token);
 
       if (!token) {
-        console.error('VerifyPage: No token provided in URL');
         setStatus('error');
         setMessage('Invalid verification link: No token provided');
         return;
       }
 
       try {
-        console.log('VerifyPage: Sending POST request to /verify');
         const response = await axios.post(
-          `${BASE_URI}verify`,
+          '/verify',
           { token },
           {
             headers: { 'Content-Type': 'application/json' },
           }
         );
-        console.log('VerifyPage: Response received:', response.data);
         setStatus('success');
         setMessage(response.data.message || 'Email verified successfully');
-        setTimeout(() => {
-          console.log('VerifyPage: Redirecting to /login');
-          navigate('/login');
-        }, 3000);
+        setTimeout(() => navigate('/login'), 3000);
       } catch (error) {
-        console.error('VerifyPage: Verification failed:', error);
         let errorMessage = 'Verification failed. Please try again or request a new verification email.';
         if (error.response) {
-          console.error('Response error details:', error.response.data);
           errorMessage = error.response.data?.detail || errorMessage;
           if (error.response.status === 401) {
             errorMessage = 'Authentication error: The server rejected the request. Please request a new verification email.';
           }
         } else if (error.request) {
-          console.error('No response received from server');
-          errorMessage = 'Unable to connect to the server. Please check if the backend is running on http://localhost:8000.';
-        } else {
-          console.error('Error details:', error.message);
-          errorMessage = error.message || errorMessage;
+          errorMessage = 'Unable to connect to the server. Please check your network.';
         }
         setStatus('error');
         setMessage(errorMessage);

@@ -1,11 +1,12 @@
-import React from 'react'
+import { Box, Typography } from '@mui/material';
 
-function home() {
+function Home() {
   return (
-    <div>
-      home
-    </div>
-  )
+    <Box sx={{ p: 4, textAlign: 'center' }}>
+      <Typography variant="h4">Welcome to Whisper Space</Typography>
+      <Typography variant="body1">This is the home page.</Typography>
+    </Box>
+  );
 }
 
-export default home
+export default Home;

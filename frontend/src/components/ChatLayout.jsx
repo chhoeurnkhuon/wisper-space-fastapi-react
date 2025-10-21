@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import NavbarComponent from './NavbarComponent';
+import NavbarComponent from './ChatInterface';
 
 function ChatLayout() {
     return (

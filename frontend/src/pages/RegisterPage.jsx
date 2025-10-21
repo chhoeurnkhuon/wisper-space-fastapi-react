@@ -1,10 +1,9 @@
-import { Alert, Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
-import axios from "axios";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Alert, Box, Button, CircularProgress, TextField, Typography } from '@mui/material';
+import axios from '../api/axiosInstance';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function RegisterPage() {
-  const BASE_URI = import.meta.env.VITE_BASE_URI;
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -26,13 +25,9 @@ function RegisterPage() {
     e.preventDefault();
     setStatus('loading');
     try {
-      await axios.post(
-        `${BASE_URI}auth/register`,
-        formData,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      await axios.post('/auth/register', formData, {
+        headers: { 'Content-Type': 'application/json' },
+      });
       setStatus('success');
       setMessage('Registration successful! Please check your email to verify your account.');
     } catch (error) {
@@ -76,6 +71,7 @@ function RegisterPage() {
             margin="normal"
             fullWidth
             required
+            aria-label="Username"
           />
           <TextField
             name="email"
@@ -87,6 +83,7 @@ function RegisterPage() {
             margin="normal"
             fullWidth
             required
+            aria-label="Email"
           />
           <TextField
             name="password"
@@ -98,6 +95,7 @@ function RegisterPage() {
             margin="normal"
             fullWidth
             required
+            aria-label="Password"
           />
           <Button
             variant="contained"
@@ -109,10 +107,10 @@ function RegisterPage() {
             {status === 'loading' ? <CircularProgress size={24} /> : 'Register'}
           </Button>
           <Box sx={{ mt: 2 }}>
-          <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
-            Already have an account? <Link to="/Login">Login</Link>
-          </Typography>
-        </Box>
+            <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
+              Already have an account? <Link to="/login">Login</Link>
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
