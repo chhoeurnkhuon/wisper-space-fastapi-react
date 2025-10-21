@@ -3,7 +3,7 @@ function NavbarComponent() {
 
     return (
         <div>
-            sfdfsf
+            {/* sfdfsf */}
         </div>
     )
 }

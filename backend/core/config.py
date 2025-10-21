@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     smtp_user: str = "neangpov66666@gmail.com"
     smtp_password: str = "nvok cgjt jbkp zcyl"
     verify_token_expire_minutes: int = 5
+    frontend_url: str = "http://localhost:5173"
 
     class Config:
         env_file = ".env"
