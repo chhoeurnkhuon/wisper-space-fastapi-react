@@ -3,31 +3,32 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
-import ChatLayout from './components/ChatLayout.jsx';
 import Layout from './components/Layout.jsx';
-import './index.css';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import VerifyPage from './pages/VerifyPage.jsx';
 import store from './redux/store.js';
+import './index.css';
+import Home from './pages/home.jsx';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     children: [
       { index: true, element: <App /> },
+      { path: '/home', element: <Home /> },
       { path: '/login', element: <LoginPage /> },
       { path: '/register', element: <RegisterPage /> },
       { path: '/verify', element: <VerifyPage /> },
-    ],
-  },
-  {
-    path: '/dashboard',
-    element: <ChatLayout />,
-    children: [
-      { index: true, element: <ProfilePage /> },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: '/dashboard', element: <ProfilePage /> },
+        ],
+      },
     ],
   },
 ]);

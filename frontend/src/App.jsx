@@ -1,19 +1,18 @@
-// App.jsx
-import { Box, Typography, Button } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Box, Typography, Button } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 function App() {
   return (
     <Box
       sx={{
-        height: '100vh', // Force full viewport height to cover the screen
+        height: '100vh',
         margin: 0,
         padding: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #6B7280 0%, #1F2937 100%)', // Full-screen gradient background
-        overflow: 'hidden', // Prevent any scrolling
+        background: 'linear-gradient(135deg, #6B7280 0%, #1F2937 100%)',
+        overflow: 'hidden',
       }}
     >
       <Box
@@ -37,7 +36,7 @@ function App() {
             color: '#1F2937',
             fontWeight: 'bold',
             mb: 2,
-            fontSize: { xs: '2rem', sm: '3rem' }, // Responsive font size
+            fontSize: { xs: '2rem', sm: '3rem' },
           }}
         >
           Welcome to Whisper Space

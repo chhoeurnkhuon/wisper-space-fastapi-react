@@ -1,12 +1,11 @@
 import { Alert, Box, Button, CircularProgress, TextField, Typography } from '@mui/material';
-import axios from "axios";
-import { useState } from "react";
+import axios from '../api/axiosInstance';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { setToken } from "../redux/reducer/authSlice";
+import { setToken } from '../redux/reducer/authSlice';
 
 function LoginPage() {
-  const BASE_URI = import.meta.env.VITE_BASE_URI;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,6 +14,7 @@ function LoginPage() {
   });
   const [status, setStatus] = useState(null); // null, 'loading', 'success', 'error'
   const [message, setMessage] = useState('');
+  const [showResend, setShowResend] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,17 +28,13 @@ function LoginPage() {
     e.preventDefault();
     setStatus('loading');
     const data = new URLSearchParams();
-    data.append("username", formData.username);
-    data.append("password", formData.password);
+    data.append('username', formData.username);
+    data.append('password', formData.password);
 
     try {
-      const response = await axios.post(
-        `${BASE_URI}auth/login`,
-        data,
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        }
-      );
+      const response = await axios.post('/auth/login', data, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      });
       const { access_token } = response.data;
       setStatus('success');
       setMessage('Login successful');
@@ -47,7 +43,23 @@ function LoginPage() {
       navigate('/dashboard');
     } catch (error) {
       setStatus('error');
-      setMessage(error.response?.data?.detail || 'Login failed');
+      const errorMsg = error.response?.data?.detail || 'Login failed';
+      setMessage(errorMsg);
+      if (errorMsg.includes('email not verified')) {
+        setShowResend(true);
+      }
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setStatus('loading');
+    try {
+      await axios.post('/auth/resend-verification', { email: formData.username });
+      setStatus('success');
+      setMessage('Verification email resent. Please check your inbox.');
+    } catch (error) {
+      setStatus('error');
+      setMessage(error.response?.data?.detail || 'Failed to resend verification email');
     }
   };
 
@@ -79,13 +91,14 @@ function LoginPage() {
         <Box component="form" onSubmit={handleLogin}>
           <TextField
             name="username"
-            label="Username or Email"
+            label="Email"
             variant="outlined"
             value={formData.username}
             onChange={handleChange}
             margin="normal"
             fullWidth
             required
+            aria-label="Email"
           />
           <TextField
             name="password"
@@ -97,6 +110,7 @@ function LoginPage() {
             margin="normal"
             fullWidth
             required
+            aria-label="Password"
           />
           <Button
             type="submit"
@@ -108,6 +122,17 @@ function LoginPage() {
             {status === 'loading' ? <CircularProgress size={24} /> : 'Login'}
           </Button>
         </Box>
+        {showResend && (
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Button
+              variant="text"
+              onClick={handleResendVerification}
+              disabled={status === 'loading'}
+            >
+              Resend Verification Email
+            </Button>
+          </Box>
+        )}
         <Box sx={{ mt: 2 }}>
           <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
             Don't have an account? <Link to="/register">Register</Link>

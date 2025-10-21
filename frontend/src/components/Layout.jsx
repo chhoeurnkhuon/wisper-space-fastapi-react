@@ -1,15 +1,18 @@
-import { Outlet } from 'react-router-dom';
-import NavbarComponent from './NavbarComponent';
+import { Outlet, useLocation } from 'react-router-dom';
+import ChatInterface from './ChatInterface';
 
 function Layout() {
-    return (
-        <div>
-            <NavbarComponent />
-            <main>
-                <Outlet />
-            </main>
-        </div>
-    )
+  const location = useLocation();
+  const showChatUI = location.pathname.startsWith('/dashboard');
+
+  return (
+    <div>
+      {showChatUI && <ChatInterface />}
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  );
 }
 
-export default Layout
+export default Layout;
