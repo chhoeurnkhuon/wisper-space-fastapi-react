@@ -1,15 +1,16 @@
-import { StrictMode } from 'react'
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css'
-import App from './App.jsx'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import LoginPage from './pages/LoginPage.jsx';
-import RegisterPage from './pages/RegisterPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
 import { Provider } from 'react-redux';
-import store from './redux/store.js';
-import Layout from './components/Layout.jsx'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import App from './App.jsx';
 import ChatLayout from './components/ChatLayout.jsx';
+import Layout from './components/Layout.jsx';
+import './index.css';
+import LoginPage from './pages/LoginPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import VerifyPage from './pages/VerifyPage.jsx';
+import store from './redux/store.js';
 
 const router = createBrowserRouter([
   {
@@ -18,16 +19,18 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <App /> },
       { path: '/login', element: <LoginPage /> },
-      { path: '/register', element: <RegisterPage /> }
-    ]
-  }, 
+      { path: '/register', element: <RegisterPage /> },
+      { path: '/verify', element: <VerifyPage /> },
+    ],
+  },
   {
     path: '/dashboard',
-    element: <ChatLayout/>,
+    element: <ChatLayout />,
     children: [
-      {index: true, element: <ProfilePage/>}
-    ]
-  }]);
+      { index: true, element: <ProfilePage /> },
+    ],
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -35,4 +38,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <RouterProvider router={router} />
     </Provider>
   </StrictMode>
-)
+);
